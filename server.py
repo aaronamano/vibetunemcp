@@ -1,6 +1,9 @@
 from fastmcp import FastMCP
+from dotenv import load_dotenv
 import requests
 import os
+
+load_dotenv()
 
 mcp = FastMCP(name="VibetuneMCP")
 
