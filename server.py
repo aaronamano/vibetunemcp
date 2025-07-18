@@ -8,6 +8,85 @@ load_dotenv()
 mcp = FastMCP(name="VibetuneMCP")
 
 @mcp.tool()
+def get_movie_recommendations(genre: str, min_year: int, max_year: int, content_rating: str, keyword: str):
+    params = {
+        "filter.type": "urn:entity:movie",
+        "filter.tags": f"urn:tag:genre:media:{genre},urn:tag:keyword:media:{keyword}",
+        "filter.release_year.min": f"{min_year}",
+        "filter.release_year.max": f"{max_year}",
+        "filter.content_rating" : f"{content_rating}"
+    }
+
+    response = requests.get(
+        "https://hackathon.api.qloo.com/v2/insights",
+        headers={
+            "accept": "application/json",
+            "X-Api-Key": os.getenv("QLOO_API_KEY")
+        },
+        params=params
+    )
+    return response.json()
+
+@mcp.tool()
+def get_tv_show_recommendations(genres: str, min_year: int, max_year: int, content_rating: str, keyword: str):
+    params = {
+        "filter.type": "urn:entity:tv_show",
+        "filter.tags": f"urn:tag:genre:media:{genres},urn:tag:keyword:media:{keyword}",
+        "filter.release_year.min": f"{min_year}",
+        "filter.release_year.max": f"{max_year}",
+        "filter.content_rating" : f"{content_rating}"
+    }
+
+    response = requests.get(
+        "https://hackathon.api.qloo.com/v2/insights",
+        headers={
+            "accept": "application/json",
+            "X-Api-Key": os.getenv("QLOO_API_KEY")
+        },
+        params=params
+    )
+    return response.json()
+
+@mcp.tool()
+def get_book_recommendations(genre: str, min_year: int, max_year: int, keyword: str):
+    params = {
+        "filter.type": "urn:entity:book",
+        "filter.tags": f"urn:tag:genre:media:{genre},urn:tag:keyword:media:{keyword}",
+        "filter.publication_year.min": f"{min_year}",
+        "filter.publication_year.max": f"{max_year}"
+    }
+
+    response = requests.get(
+        "https://hackathon.api.qloo.com/v2/insights",
+        headers={
+            "accept": "application/json",
+            "X-Api-Key": os.getenv("QLOO_API_KEY")
+        },
+        params=params
+    )
+    return response.json() 
+
+@mcp.tool()
+def get_qloo_search_results(query: str, num_pages: int = 1):
+    params = {
+        "query": f"{query}",
+        "types": "urn:entity:album",
+        "operator.filter.tags": "union",
+        "page": f"{num_pages}",
+        "sort_by": "match",
+    }
+
+    response = requests.get(
+        "https://hackathon.api.qloo.com/v2/search",
+        headers={
+            "accept": "application/json",
+            "X-Api-Key": os.getenv("QLOO_API_KEY")
+        },
+        params=params
+    )
+    return response.json() 
+
+@mcp.tool()
 def get_token():
     headers = {"Content-Type": "application/x-www-form-urlencoded"}
     data = { "grant_type": "client_credentials", "client_id": os.getenv("SPOTIFY_CLIENT_ID"), "client_secret": os.getenv("SPOTIFY_CLIENT_SECRET") }
@@ -58,6 +137,13 @@ def insert_songs(access_token, song_ids: list, playlist_id, position: int = 0):
         "uris": song_ids,
         "position": position
     }
+
+@mcp.tool()
+def run_process():
+    get_token()
+    create_playlist()
+    get_songs()
+    insert_songs()
 
 
 if __name__ == "__main__":
