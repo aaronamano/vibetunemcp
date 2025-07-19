@@ -25,7 +25,10 @@ def get_movie_recommendations(genre: str, min_year: int, max_year: int, content_
         },
         params=params
     )
-    return response.json()
+
+    data = response.json()
+    for entity in data['results']['entities']:
+        return entity['name']
 
 @mcp.tool()
 def get_tv_show_recommendations(genres: str, min_year: int, max_year: int, content_rating: str, keyword: str):
@@ -45,7 +48,10 @@ def get_tv_show_recommendations(genres: str, min_year: int, max_year: int, conte
         },
         params=params
     )
-    return response.json()
+
+    data = response.json()
+    for entity in data['results']['entities']:
+        return entity['name']
 
 @mcp.tool()
 def get_book_recommendations(genre: str, min_year: int, max_year: int, keyword: str):
@@ -64,7 +70,10 @@ def get_book_recommendations(genre: str, min_year: int, max_year: int, keyword: 
         },
         params=params
     )
-    return response.json() 
+    
+    data = response.json()
+    for entity in data['results']['entities']:
+        return entity['name']
 
 @mcp.tool()
 def get_qloo_search_results(query: str, num_pages: int = 1):
@@ -84,7 +93,10 @@ def get_qloo_search_results(query: str, num_pages: int = 1):
         },
         params=params
     )
-    return response.json() 
+
+    data = response.json()
+    for result in data['results']:
+        return result['name']
 
 @mcp.tool()
 def get_token():
