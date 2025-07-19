@@ -27,8 +27,11 @@ def get_movie_recommendations(genre: str, min_year: int, max_year: int, content_
     )
 
     data = response.json()
+    movies = []
     for entity in data['results']['entities']:
-        return entity['name']
+        movies.append(entity['name'])
+
+    return movies
 
 @mcp.tool()
 def get_tv_show_recommendations(genres: str, min_year: int, max_year: int, content_rating: str, keyword: str):
@@ -50,11 +53,19 @@ def get_tv_show_recommendations(genres: str, min_year: int, max_year: int, conte
     )
 
     data = response.json()
+    tv_shows = []
     for entity in data['results']['entities']:
-        return entity['name']
+        tv_shows.append(entity['name'])
+
+    return tv_shows
 
 @mcp.tool()
 def get_book_recommendations(genre: str, min_year: int, max_year: int, keyword: str):
+    '''
+    genre options: "fiction", "science_fiction", "collections", "fantasy", "speculative_fiction", "classics", "science_fiction_fantasy", "criticism", "reference",
+    "books_about_books", "literature", "literary_criticism", "short_stories", "anthologies", "horror", "cyberpunk", "time_travel", "post_apocalyptic", "adventure",
+    "high_fantasy", "magic", "young_adult", "young_adult_fantasy", "theory"
+    '''
     params = {
         "filter.type": "urn:entity:book",
         "filter.tags": f"urn:tag:genre:media:{genre},urn:tag:keyword:media:{keyword}",
@@ -72,21 +83,24 @@ def get_book_recommendations(genre: str, min_year: int, max_year: int, keyword: 
     )
     
     data = response.json()
+    books = []
     for entity in data['results']['entities']:
-        return entity['name']
+        books.append(entity['name'])
+    
+    return books
 
 @mcp.tool()
 def get_qloo_search_results(query: str, num_pages: int = 1):
     params = {
-        "query": f"{query}",
+        "query": query,
         "types": "urn:entity:album",
         "operator.filter.tags": "union",
-        "page": f"{num_pages}",
+        "page": num_pages,
         "sort_by": "match",
     }
 
     response = requests.get(
-        "https://hackathon.api.qloo.com/v2/search",
+        "https://hackathon.api.qloo.com/search",
         headers={
             "accept": "application/json",
             "X-Api-Key": os.getenv("QLOO_API_KEY")
@@ -95,8 +109,11 @@ def get_qloo_search_results(query: str, num_pages: int = 1):
     )
 
     data = response.json()
+    albums = []
     for result in data['results']:
-        return result['name']
+        albums.append(result['name'])
+
+    return albums
 
 @mcp.tool()
 def get_token():

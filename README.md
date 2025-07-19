@@ -15,7 +15,7 @@
 1. Open Claude Desktop
 2. Go to `Settings` -> `developer` -> `Edit Config`
 3. Open up the `claude_desktop_config.json` file
-4. add this code: 
+4. add this code and make sure to save it: 
 ```json
 {
   "mcpServers": {
