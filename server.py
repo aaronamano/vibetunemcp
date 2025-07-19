@@ -69,6 +69,16 @@ def get_tv_show_recommendations(genres: str, min_year: int, max_year: int, conte
 
     return tv_shows
 
+@mcp.prompt()
+def suggest_songs_from_tv_shows(tv_shows: list):
+    """
+    Suggest songs based on the provided tv show titles.
+    """
+    suggestions = []
+    for tv_show in tv_shows:
+        suggestions.append(f"Suggest a song from the movie '{tv_show}'")
+    return suggestions
+
 @mcp.tool()
 def get_book_recommendations(genre: str, min_year: int, max_year: int, keyword: str):
     '''
@@ -99,6 +109,16 @@ def get_book_recommendations(genre: str, min_year: int, max_year: int, keyword: 
     
     return books
 
+@mcp.prompt()
+def suggest_songs_from_books(books: list):
+    """
+    Suggest songs based on the provided book titles.
+    """
+    suggestions = []
+    for book in books:
+        suggestions.append(f"Suggest a song from the book '{book}'")
+    return suggestions
+
 @mcp.tool()
 def get_video_game_recommendations(genre: str, min_year: int, max_year: int, keyword: str):
     '''
@@ -128,8 +148,18 @@ def get_video_game_recommendations(genre: str, min_year: int, max_year: int, key
 
     return video_games
 
+@mcp.prompt()
+def suggest_songs_from_video_games(video_games: list):
+    """
+    Suggest songs based on the provided video game titles.
+    """
+    suggestions = []
+    for video_game in video_games:
+        suggestions.append(f"Suggest a song from the movie '{video_game}'")
+    return suggestions
+
 @mcp.tool()
-def get_qloo_search_results(query: str, num_pages: int = 1):
+def get_albums_from_search(query: str, num_pages: int = 1):
     params = {
         "query": query,
         "types": "urn:entity:album",
@@ -153,6 +183,16 @@ def get_qloo_search_results(query: str, num_pages: int = 1):
         albums.append(result['name'])
 
     return albums
+
+@mcp.prompt()
+def suggest_songs_from_movies(albums: list):
+    """
+    Suggest songs based on the provided album titles.
+    """
+    suggestions = []
+    for album in albums:
+        suggestions.append(f"Suggest a song from the movie '{album}'")
+    return suggestions
 
 @mcp.tool()
 def get_token():
