@@ -33,6 +33,16 @@ def get_movie_recommendations(genre: str, min_year: int, max_year: int, content_
 
     return movies
 
+@mcp.prompt()
+def suggest_songs_from_movies(movies: list):
+    """
+    Suggest songs based on the provided movie titles.
+    """
+    suggestions = []
+    for movie in movies:
+        suggestions.append(f"Suggest a song from the movie '{movie}'")
+    return suggestions
+
 @mcp.tool()
 def get_tv_show_recommendations(genres: str, min_year: int, max_year: int, content_rating: str, keyword: str):
     params = {
@@ -88,6 +98,35 @@ def get_book_recommendations(genre: str, min_year: int, max_year: int, keyword: 
         books.append(entity['name'])
     
     return books
+
+@mcp.tool()
+def get_video_game_recommendations(genre: str, min_year: int, max_year: int, keyword: str):
+    '''
+    genre options: "top_down_shoot_em_up", "action_rpg", "point_click", "fps", "linear_action_adventure", "open_world_action", "defense",
+    "survival", "2d_platformer", "virtual_life", "moba", "vertical_shoot_em_up", "party"
+    '''
+    params = {
+        "filter.type": "urn:entity:videogame",
+        "filter.tags": f"urn:tag:genre:media:{genre},urn:tag:keyword:media:{keyword}",
+        "filter.release_year.min": f"{min_year}",
+        "filter.release_year.max": f"{max_year}"
+    }
+
+    response = requests.get(
+        "https://hackathon.api.qloo.com/v2/insights",
+        headers={
+            "accept": "application/json",
+            "X-Api-Key": os.getenv("QLOO_API_KEY")
+        },
+        params=params
+    )
+
+    data = response.json()
+    video_games = []
+    for entity in data['results']['entities']:
+        video_games.append(entity['name'])
+
+    return video_games
 
 @mcp.tool()
 def get_qloo_search_results(query: str, num_pages: int = 1):
