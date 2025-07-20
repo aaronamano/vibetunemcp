@@ -232,21 +232,29 @@ def create_playlist(access_token: str, name: str ="My New Playlist", description
         "public": public
     }
     
-    response = requests.post(f"https://api.spotify.com/v1/users/6jvibgrfvek4sz1x85zdc9a9v/playlists", headers=headers, data=data)
+    response = requests.post(f"https://api.spotify.com/v1/users/6jvibgrfvek4sz1x85zdc9a9v/playlists", headers=headers, json=data)
 
-    return response.json()
+    data = response.json()
+    playlist_id = data["id"]
+    return playlist_id
 
 @mcp.tool()
-def get_songs(access_token: str, q: str, type: str):
+def get_songs(access_token: str, song: str, limit: int = 10, market: str = "US"):
+    params = {
+        "q": song,
+        "type": "track",
+        "limit": limit,
+        "market": market
+    }
     headers = {
         "Authorization": "Bearer " + access_token,
     }
-    response = requests.get(f"https://api.spotify.com/v1/search?q={q}&type={type}'", headers=headers)
+    response = requests.get(f"https://api.spotify.com/v1/search", headers=headers, params=params)
     
     return response.json()
 
 @mcp.tool()
-def insert_songs(access_token: str, song_ids: list, playlist_id, position: int = 0):
+def insert_songs(access_token: str, song_ids: list, playlist_id: str, position: int = 0):
     headers = {
         "Authorization": "Bearer " + access_token,
         "Content-Type": "application/json"
