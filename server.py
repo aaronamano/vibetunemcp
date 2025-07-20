@@ -263,6 +263,8 @@ def insert_songs(access_token: str, song_ids: list, playlist_id: str, position: 
         "uris": song_ids,
         "position": position
     }
+    
+    requests.post(f"https://api.spotify.com/v1/playlists/{playlist_id}/tracks", headers=headers, json=data)
 
 
 if __name__ == "__main__":
