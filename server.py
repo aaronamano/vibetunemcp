@@ -238,22 +238,22 @@ def get_songs(access_token: str, song: str, limit: int = 1, market: str = "US"):
     response = requests.get(f"https://api.spotify.com/v1/search", headers=headers, params=params)
     data = response.json()
     
-    track_ids = []
+    track_uris = []
     if 'tracks' in data and 'items' in data['tracks']:
         for track in data['tracks']['items']:
-            track_ids.append(track['id'])
+            track_uris.append(track['uri'])
     
-    return track_ids
+    return track_uris
 
 
 @mcp.tool()
-def insert_songs(access_token: str, track_ids: list, playlist_id: str, position: int = 0):
+def insert_songs(access_token: str, track_uris: list, playlist_id: str, position: int = 0):
     headers = {
         "Authorization": "Bearer " + access_token,
         "Content-Type": "application/json"
     }
     data = {
-        "uris": track_ids,
+        "uris": track_uris,
         "position": position
     }
     
