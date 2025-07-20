@@ -59,18 +59,6 @@ def suggest_songs_from_video_games(video_games: list):
         suggestions.append(f"Suggest a song from the movie '{video_game}'")
     return suggestions
 
-@mcp.prompt()
-def suggest_songs_from_movies(albums: list):
-    """
-    Suggest songs based on the provided movie titles.
-    Return format: Array of strings with song suggestions.
-    Example: ["Song A from Movie 1", "Song B from Movie 2"]
-    """
-    suggestions = []
-    for album in albums:
-        suggestions.append(f"Suggest a song from the movie '{album}'")
-    return suggestions
-
 @mcp.tool()
 def get_movie_recommendations(genre: str, min_year: int, max_year: int, content_rating: str, keyword: str):
     params = {
