@@ -5,7 +5,7 @@
 1. git clone
 2. run `uv venv`
 3. run `source .venv/bin/activate`
-4. run `uv pip install requests fastmcp python-dotenv`
+4. run `uv pip install requests fastmcp python-dotenv spotipy`
 5. run `python3 server.py`
 6. to leave environment run `deactivate`
 7. add an .env file under `vibetunemcp/` directory

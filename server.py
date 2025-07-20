@@ -2,6 +2,10 @@ from fastmcp import FastMCP
 from dotenv import load_dotenv
 import requests
 import os
+from urllib.parse import urlencode
+import base64
+import spotipy
+from spotipy.oauth2 import SpotifyOAuth
 
 load_dotenv()
 
@@ -206,17 +210,20 @@ def get_albums_from_search(query: str, num_pages: int = 1):
 
 @mcp.tool()
 def get_token():
-    headers = {"Content-Type": "application/x-www-form-urlencoded"}
-    data = { "grant_type": "client_credentials", "client_id": os.getenv("SPOTIFY_CLIENT_ID"), "client_secret": os.getenv("SPOTIFY_CLIENT_SECRET") }
-    response = requests.post("https://accounts.spotify.com/api/token", headers=headers, data=data)
-    
-    access_token = response.json()['access_token']
+    sp = spotipy.Spotify(auth_manager=SpotifyOAuth(
+        client_id=os.getenv('SPOTIFY_CLIENT_ID'),
+        client_secret=os.getenv('SPOTIFY_CLIENT_SECRET'),
+        redirect_uri='http://127.0.0.1:8000/callback',
+        scope='playlist-modify-public playlist-modify-private'
+    ))
+
+    access_token = sp.auth_manager.get_access_token(as_dict=False)
     return access_token
 
 @mcp.tool()
-def create_playlist(access_token, name: str ="My New Playlist", description: str ="Created with VibetuneAI", public: bool = True):
+def create_playlist(access_token: str, name: str ="My New Playlist", description: str ="Created with VibetuneAI", public: bool = True):
     headers = {
-        "Authorization": f"Bearer {access_token}",
+        "Authorization": "Bearer " + access_token,
         "Content-Type": "application/json"
     }
     data = {
@@ -224,43 +231,30 @@ def create_playlist(access_token, name: str ="My New Playlist", description: str
         "description": description,
         "public": public
     }
-    user_id = "6jvibgrfvek4sz1x85zdc9a9v"
     
-    response = requests.post(f"https://api.spotify.com/v1/{user_id}/playlists", headers=headers, data=data)
-    
-    playlist_id = response.json()['id']
-    return playlist_id
+    response = requests.post(f"https://api.spotify.com/v1/users/6jvibgrfvek4sz1x85zdc9a9v/playlists", headers=headers, data=data)
+
+    return response.json()
 
 @mcp.tool()
-def get_songs(access_token, q: str, type: str):
+def get_songs(access_token: str, q: str, type: str):
     headers = {
-        "Authorization": f"Bearer {access_token}",
+        "Authorization": "Bearer " + access_token,
     }
     response = requests.get(f"https://api.spotify.com/v1/search?q={q}&type={type}'", headers=headers)
     
-    if response.status_code == 200:
-        song_ids = response.json()['tracks']['items']['id']
-        return song_ids
-    else:
-        return {"error": "Failed to fetch songs"}
+    return response.json()
 
 @mcp.tool()
-def insert_songs(access_token, song_ids: list, playlist_id, position: int = 0):
+def insert_songs(access_token: str, song_ids: list, playlist_id, position: int = 0):
     headers = {
-        "Authorization": f"Bearer {access_token}",
+        "Authorization": "Bearer " + access_token,
         "Content-Type": "application/json"
     }
     data = {
         "uris": song_ids,
         "position": position
     }
-
-@mcp.tool()
-def run_process():
-    get_token()
-    create_playlist()
-    get_songs()
-    insert_songs()
 
 
 if __name__ == "__main__":
