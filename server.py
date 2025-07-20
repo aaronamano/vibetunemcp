@@ -2,8 +2,6 @@ from fastmcp import FastMCP
 from dotenv import load_dotenv
 import requests
 import os
-from urllib.parse import urlencode
-import base64
 import spotipy
 from spotipy.oauth2 import SpotifyOAuth
 
@@ -227,7 +225,7 @@ def create_playlist(access_token: str, name: str ="My New Playlist", description
     return playlist_id
 
 @mcp.tool()
-def get_songs(access_token: str, song: str, limit: int = 10, market: str = "US"):
+def get_songs(access_token: str, song: str, limit: int = 1, market: str = "US"):
     params = {
         "q": song,
         "type": "track",
@@ -238,19 +236,24 @@ def get_songs(access_token: str, song: str, limit: int = 10, market: str = "US")
         "Authorization": "Bearer " + access_token,
     }
     response = requests.get(f"https://api.spotify.com/v1/search", headers=headers, params=params)
-
-    return response.json()
+    data = response.json()
+    
+    track_ids = []
+    if 'tracks' in data and 'items' in data['tracks']:
+        for track in data['tracks']['items']:
+            track_ids.append(track['id'])
+    
+    return track_ids
 
 
 @mcp.tool()
-def insert_songs(access_token: str, song_ids: list, playlist_id: str, position: int = 0):
-    song_uris = [f"spotify:track:{song_id}" for song_id in song_ids]
+def insert_songs(access_token: str, track_ids: list, playlist_id: str, position: int = 0):
     headers = {
         "Authorization": "Bearer " + access_token,
         "Content-Type": "application/json"
     }
     data = {
-        "uris": song_uris,
+        "uris": track_ids,
         "position": position
     }
     
