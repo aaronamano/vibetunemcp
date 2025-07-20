@@ -214,7 +214,7 @@ def get_token():
         client_id=os.getenv('SPOTIFY_CLIENT_ID'),
         client_secret=os.getenv('SPOTIFY_CLIENT_SECRET'),
         redirect_uri='http://127.0.0.1:8000/callback',
-        scope='playlist-modify-public playlist-modify-private'
+        scope='playlist-modify-public playlist-modify-private user-read-private'
     ))
 
     access_token = sp.auth_manager.get_access_token(as_dict=False)
