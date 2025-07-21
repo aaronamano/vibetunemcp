@@ -40,6 +40,7 @@ VibetuneMCP is an MCP server that helps generate recommended media titles to the
 I created my MCP server using FastMCP, a Python-based framework that—builds MCP servers. I built several MCP tools as well as a couple MCP prompt templates. In my MCP tools I leveraged Qloo’s Taste AI API, which generates media recommendations from the user’s taste preferences (favorite genre, year-range, keywords, etc.); I implemented Spotify’s Web API, which creates a new playlist, gets song URIs, and add songs into playlists.
 
 <h4>MCP Tools</h4>
+
 The first 5 tools use Qloo’s Taste AI API
 - `get_movie_recommendations`: Generates movie recommendations based on the user’s preferred genre, keyword, year-range, and content rating.
 - `get_tv_show_recommendations`: Generates tv show recommendations based on the user’s preferred genre, keyword, year-range, and content rating.
@@ -54,6 +55,7 @@ The last 4 tools use Spotify’s Web API
 - `insert_songs`: Inserts the list of URIs into the playlist. The playlist is accessed and obtained by passing the playlist id in this tool.
 
 <h4>MCP Prompts</h4>
+
 These are prompt templates that suggest songs related to recommended media from Qloo’s API
 - `suggest_songs_from_books`: After getting a recommended list books, the user inputs the list into the prompt template. The LLM suggests a song related or associated with each book in the list.
 - `suggest_songs_from_movies`: After getting a recommended list of movies, the user inputs the list into the prompt template. The LLM suggests a song related or associated with each movie in the list.
