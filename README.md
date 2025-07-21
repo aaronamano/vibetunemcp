@@ -36,7 +36,7 @@ Music unites people from around the world—we listen, talk, share, debate, sing
 ## What it does
 VibetuneMCP is an MCP server that helps generate recommended media titles to the user based on their taste preferences using Qloo’s API and suggesting songs related to the media titles. Afterwards, a new playlist is created and the suggested songs are added to that playlist using Spotify’s API.  My MCP server will be reliant on using Claude Desktop so users can be able to query and prompt their own preferences.
 
-## How we built it
+## How I built it
 I created my MCP server using FastMCP, a Python-based framework that—builds MCP servers. I built several MCP tools as well as a couple MCP prompt templates. In my MCP tools I leveraged Qloo’s Taste AI API, which generates media recommendations from the user’s taste preferences (favorite genre, year-range, keywords, etc.); I implemented Spotify’s Web API, which creates a new playlist, gets song URIs, and add songs into playlists.
 
 <h4>MCP Tools</h4>
@@ -60,7 +60,7 @@ These are prompt templates that suggest songs related to recommended media from 
 - `suggest_songs_from_tv_shows`: After getting a recommended list of tv shows, the user inputs the list into the prompt template. The LLM suggests a song related or associated with each tv show in the list.
 - `suggest_songs_from_video_games`: After getting a recommended list of video games, the user inputs the list into the prompt template. The LLM suggests a song related or associated with each video game in the list.
 
-## Challenges we ran into
+## Challenges I ran into
 <ol>
 <li>Working with Qloo’s API documentation was a challenge since it was highly ambiguous, creating confusion. The list of parameters was overwhelming, and finding which parameters belonged to which category seemed tedious. Another challenge was finding what tags existed to help filter certain information since there’s no static list of tags to refer to. Ultimately, I was able to adapt to Qloo’s API documentation and experiment with it a lot.</li>
 <li>Another challenge was integrating the MCP tools altogether and executing the process seamlessly from recommending media titles to adding songs to the playlist without any flaws. I was able to embrace the process and overcome it by running multiple trials with Claude.</li>
