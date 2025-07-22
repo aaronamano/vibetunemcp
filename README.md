@@ -7,6 +7,11 @@
 6. add an .env file under `vibetunemcp/` directory
 7. in the .env file add `QLOO_API_KEY=""`, `SPOTIFY_CLIENT_ID=""`, `SPOTIFY_CLIENT_SECRET=""`
 
+## Deploying it via Docker
+make sure to complete the setup first
+1. run `docker build -t vibetunemcp .`
+2. run `docker run -p 8000:000 --env-file .env vibetunemcp`
+
 ## Claude Desktop Integration
 1. Open Claude Desktop
 2. Go to `Settings` -> `developer` -> `Edit Config`
